@@ -109,34 +109,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\closeRepeat.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\closeRepeat1440.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\arrangeSelectable1080.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\help1080.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\lobby1080.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\team1080.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\helpDetailed1080.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\stageFailed1080.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\statistics1080.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\arrangeSelectableFullScreen1080.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\repeatEnded1080.png" />
