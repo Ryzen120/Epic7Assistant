@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using Epic7Assistant.Properties;
 using System.IO;
 using OpenCvSharp;
+using System.Reflection;
 
 namespace Epic7Assistant
 {
@@ -34,6 +35,8 @@ namespace Epic7Assistant
         string gFilePathFailed;
         string gFilePathInventoryFull;
         string gFilePathEnergy;
+
+        Mat gResourceImage;
 
         public Automations(Epic7AssistantGUI gui, bool hunt, bool ap, bool events, bool expeditions, bool resolution1080, bool resolution1440, bool resolution4k)
         {
@@ -249,6 +252,7 @@ namespace Epic7Assistant
             }
         }
 
+
         private bool ImageExistsOnScreen(string imageFileName)
         {
             using (Bitmap bmpScreenCapture = new Bitmap(Screen.PrimaryScreen.Bounds.Width,
@@ -275,7 +279,7 @@ namespace Epic7Assistant
                     image.Dispose();
                     bmpScreenCapture.Dispose();
                     screenGray.Dispose();
-                    
+
                     bool tempResult = Cv2.CountNonZero(result) > 0;
 
                     result.Dispose();

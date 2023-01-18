@@ -29,8 +29,9 @@ namespace Epic7Assistant
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Epic7AssistantGUI));
             this.m_PanelTitleBar = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.m_PictureBox = new System.Windows.Forms.PictureBox();
             this.m_ButtonCloseApp = new System.Windows.Forms.Button();
             this.m_ButtonMinimize = new System.Windows.Forms.Button();
             this.m_LabelTitle = new System.Windows.Forms.Label();
@@ -41,6 +42,10 @@ namespace Epic7Assistant
             this.m_LabelLoggingOutput = new System.Windows.Forms.Label();
             this.m_RichTextBoxLoggingOutput = new System.Windows.Forms.RichTextBox();
             this.m_PanelAuto = new System.Windows.Forms.Panel();
+            this.m_LabelStepFour = new System.Windows.Forms.Label();
+            this.m_LabelStepThree = new System.Windows.Forms.Label();
+            this.m_LabelStepTwo = new System.Windows.Forms.Label();
+            this.m_LabelStepOne = new System.Windows.Forms.Label();
             this.m_ButtonCancel = new System.Windows.Forms.Button();
             this.m_CheckBoxExped = new System.Windows.Forms.CheckBox();
             this.m_CheckBoxEvent = new System.Windows.Forms.CheckBox();
@@ -50,12 +55,8 @@ namespace Epic7Assistant
             this.m_CheckBox1440 = new System.Windows.Forms.CheckBox();
             this.m_CheckBox1080 = new System.Windows.Forms.CheckBox();
             this.m_ButtonRun = new System.Windows.Forms.Button();
-            this.m_LabelStepOne = new System.Windows.Forms.Label();
-            this.m_LabelStepTwo = new System.Windows.Forms.Label();
-            this.m_LabelStepThree = new System.Windows.Forms.Label();
-            this.m_LabelStepFour = new System.Windows.Forms.Label();
             this.m_PanelTitleBar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBox)).BeginInit();
             this.panel1.SuspendLayout();
             this.m_PanelLogs.SuspendLayout();
             this.m_PanelAuto.SuspendLayout();
@@ -65,7 +66,7 @@ namespace Epic7Assistant
             // 
             this.m_PanelTitleBar.BackColor = System.Drawing.Color.Black;
             this.m_PanelTitleBar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.m_PanelTitleBar.Controls.Add(this.pictureBox1);
+            this.m_PanelTitleBar.Controls.Add(this.m_PictureBox);
             this.m_PanelTitleBar.Controls.Add(this.m_ButtonCloseApp);
             this.m_PanelTitleBar.Controls.Add(this.m_ButtonMinimize);
             this.m_PanelTitleBar.Controls.Add(this.m_LabelTitle);
@@ -77,15 +78,16 @@ namespace Epic7Assistant
             this.m_PanelTitleBar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.m_PanelTitleBar_MouseMove);
             this.m_PanelTitleBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.m_PanelTitleBar_MouseUp);
             // 
-            // pictureBox1
+            // m_PictureBox
             // 
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pictureBox1.Location = new System.Drawing.Point(-7, -1);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(102, 70);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
+            this.m_PictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.m_PictureBox.Image = ((System.Drawing.Image)(resources.GetObject("m_PictureBox.Image")));
+            this.m_PictureBox.Location = new System.Drawing.Point(-3, 1);
+            this.m_PictureBox.Name = "m_PictureBox";
+            this.m_PictureBox.Size = new System.Drawing.Size(102, 70);
+            this.m_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.m_PictureBox.TabIndex = 6;
+            this.m_PictureBox.TabStop = false;
             // 
             // m_ButtonCloseApp
             // 
@@ -210,6 +212,43 @@ namespace Epic7Assistant
             this.m_PanelAuto.Size = new System.Drawing.Size(1218, 683);
             this.m_PanelAuto.TabIndex = 44;
             // 
+            // m_LabelStepFour
+            // 
+            this.m_LabelStepFour.AutoSize = true;
+            this.m_LabelStepFour.Location = new System.Drawing.Point(26, 214);
+            this.m_LabelStepFour.Name = "m_LabelStepFour";
+            this.m_LabelStepFour.Size = new System.Drawing.Size(233, 13);
+            this.m_LabelStepFour.TabIndex = 41;
+            this.m_LabelStepFour.Text = "4. Select your assistant of choice then click run.";
+            // 
+            // m_LabelStepThree
+            // 
+            this.m_LabelStepThree.AutoSize = true;
+            this.m_LabelStepThree.Location = new System.Drawing.Point(26, 105);
+            this.m_LabelStepThree.Name = "m_LabelStepThree";
+            this.m_LabelStepThree.Size = new System.Drawing.Size(172, 13);
+            this.m_LabelStepThree.TabIndex = 40;
+            this.m_LabelStepThree.Text = "3. Select resolution of main display.";
+            // 
+            // m_LabelStepTwo
+            // 
+            this.m_LabelStepTwo.AutoSize = true;
+            this.m_LabelStepTwo.Location = new System.Drawing.Point(26, 69);
+            this.m_LabelStepTwo.Name = "m_LabelStepTwo";
+            this.m_LabelStepTwo.Size = new System.Drawing.Size(351, 13);
+            this.m_LabelStepTwo.TabIndex = 39;
+            this.m_LabelStepTwo.Text = "2. Move BlueStacks to main display and set BlueStacks to be full screen.";
+            // 
+            // m_LabelStepOne
+            // 
+            this.m_LabelStepOne.AutoSize = true;
+            this.m_LabelStepOne.Location = new System.Drawing.Point(26, 35);
+            this.m_LabelStepOne.Name = "m_LabelStepOne";
+            this.m_LabelStepOne.Size = new System.Drawing.Size(447, 13);
+            this.m_LabelStepOne.TabIndex = 38;
+            this.m_LabelStepOne.Text = "1. Go to windows settings -> Display -> Set monitor where BlueStacks will run to " +
+    "main display. ";
+            // 
             // m_ButtonCancel
             // 
             this.m_ButtonCancel.Location = new System.Drawing.Point(626, 585);
@@ -269,9 +308,9 @@ namespace Epic7Assistant
             this.m_CheckBox4k.AutoSize = true;
             this.m_CheckBox4k.Location = new System.Drawing.Point(48, 182);
             this.m_CheckBox4k.Name = "m_CheckBox4k";
-            this.m_CheckBox4k.Size = new System.Drawing.Size(38, 17);
+            this.m_CheckBox4k.Size = new System.Drawing.Size(39, 17);
             this.m_CheckBox4k.TabIndex = 30;
-            this.m_CheckBox4k.Text = "4k";
+            this.m_CheckBox4k.Text = "4K";
             this.m_CheckBox4k.UseVisualStyleBackColor = true;
             this.m_CheckBox4k.CheckedChanged += new System.EventHandler(this.m_CheckBox4k_CheckedChanged);
             // 
@@ -307,43 +346,6 @@ namespace Epic7Assistant
             this.m_ButtonRun.UseVisualStyleBackColor = true;
             this.m_ButtonRun.Click += new System.EventHandler(this.m_ButtonRun_Click);
             // 
-            // m_LabelStepOne
-            // 
-            this.m_LabelStepOne.AutoSize = true;
-            this.m_LabelStepOne.Location = new System.Drawing.Point(26, 35);
-            this.m_LabelStepOne.Name = "m_LabelStepOne";
-            this.m_LabelStepOne.Size = new System.Drawing.Size(447, 13);
-            this.m_LabelStepOne.TabIndex = 38;
-            this.m_LabelStepOne.Text = "1. Go to windows settings -> Display -> Set monitor where BlueStacks will run to " +
-    "main display. ";
-            // 
-            // m_LabelStepTwo
-            // 
-            this.m_LabelStepTwo.AutoSize = true;
-            this.m_LabelStepTwo.Location = new System.Drawing.Point(26, 69);
-            this.m_LabelStepTwo.Name = "m_LabelStepTwo";
-            this.m_LabelStepTwo.Size = new System.Drawing.Size(351, 13);
-            this.m_LabelStepTwo.TabIndex = 39;
-            this.m_LabelStepTwo.Text = "2. Move BlueStacks to main display and set BlueStacks to be full screen.";
-            // 
-            // m_LabelStepThree
-            // 
-            this.m_LabelStepThree.AutoSize = true;
-            this.m_LabelStepThree.Location = new System.Drawing.Point(26, 105);
-            this.m_LabelStepThree.Name = "m_LabelStepThree";
-            this.m_LabelStepThree.Size = new System.Drawing.Size(172, 13);
-            this.m_LabelStepThree.TabIndex = 40;
-            this.m_LabelStepThree.Text = "3. Select resolution of main display.";
-            // 
-            // m_LabelStepFour
-            // 
-            this.m_LabelStepFour.AutoSize = true;
-            this.m_LabelStepFour.Location = new System.Drawing.Point(26, 214);
-            this.m_LabelStepFour.Name = "m_LabelStepFour";
-            this.m_LabelStepFour.Size = new System.Drawing.Size(233, 13);
-            this.m_LabelStepFour.TabIndex = 41;
-            this.m_LabelStepFour.Text = "4. Select your assistant of choice then click run.";
-            // 
             // Epic7AssistantGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -359,7 +361,7 @@ namespace Epic7Assistant
             this.Text = "Form1";
             this.m_PanelTitleBar.ResumeLayout(false);
             this.m_PanelTitleBar.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBox)).EndInit();
             this.panel1.ResumeLayout(false);
             this.m_PanelLogs.ResumeLayout(false);
             this.m_PanelLogs.PerformLayout();
@@ -372,7 +374,7 @@ namespace Epic7Assistant
         #endregion
 
         private System.Windows.Forms.Panel m_PanelTitleBar;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox m_PictureBox;
         private System.Windows.Forms.Button m_ButtonCloseApp;
         private System.Windows.Forms.Button m_ButtonMinimize;
         private System.Windows.Forms.Label m_LabelTitle;
