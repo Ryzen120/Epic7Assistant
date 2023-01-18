@@ -63,6 +63,16 @@ namespace Epic7Assistant.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap energy1080 {
+            get {
+                object obj = ResourceManager.GetObject("energy1080", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap helpDetailed1080 {
             get {
                 object obj = ResourceManager.GetObject("helpDetailed1080", resourceCulture);

@@ -26,17 +26,19 @@ namespace Epic7Assistant
         bool g1080p;
         bool g1440p;
         bool g4k;
+        bool gStatus;
 
         int gTimeBetweenClicks;
         int gPointX;
         int gPointY;
+        int gPointXenergy;
+        int gPointYenergy;
 
         string gFilePathRepeat;
         string gFilePathFailed;
         string gFilePathInventoryFull;
         string gFilePathEnergy;
 
-        Mat gResourceImage;
 
         public Automations(Epic7AssistantGUI gui, bool hunt, bool ap, bool events, bool expeditions, bool resolution1080, bool resolution1440, bool resolution4k)
         {
@@ -48,12 +50,15 @@ namespace Epic7Assistant
             g1440p = resolution1440;
             g4k = resolution4k;
             gTimeBetweenClicks = 4000;
+            gStatus = false;
 
             // Set resolutions
             if(g1080p)
             {
                 gPointX = Globals.PointX1080;
                 gPointY = Globals.PointY1080;
+                gPointXenergy = Globals.PointX1080energy;
+                gPointYenergy = Globals.PointY1080energy;
                 gFilePathRepeat = Globals.filePathRepeat1080;
                 gFilePathFailed = Globals.filePathFailed1080;
                 gFilePathInventoryFull = Globals.filePathInventory1080;
@@ -63,6 +68,8 @@ namespace Epic7Assistant
             {
                 gPointX = Globals.PointX1440;
                 gPointY = Globals.PointY1440;
+                gPointXenergy = Globals.PointX1440energy;
+                gPointYenergy = Globals.PointY1440energy;
                 gFilePathRepeat = Globals.filePathRepeat1440;
                 gFilePathFailed = Globals.filePathFailed1440;
                 gFilePathInventoryFull = Globals.filePathInventory1440;
@@ -72,6 +79,8 @@ namespace Epic7Assistant
             {
                 gPointX = Globals.PointX4k;
                 gPointY = Globals.PointY4k;
+                gPointXenergy = Globals.PointX4kenergy;
+                gPointYenergy = Globals.PointY4kenergy;
                 gFilePathRepeat = Globals.filePathRepeat4k;
                 gFilePathFailed = Globals.filePathFailed4k;
                 gFilePathInventoryFull = Globals.filePathInventory4k;
@@ -80,10 +89,18 @@ namespace Epic7Assistant
 
             if (gHunt)
             {
+                gui.UpdateLogs("Hunt started!");
+
                 // Run Hunt function
-                while(!Globals.Cancelled)
+                while (!Globals.Cancelled)
                 {
                     InventoryCheck();
+
+                    if(gStatus)
+                    {
+                        break;
+                    }
+
                     Thread.Sleep(5000);
                     RunHunt();
                 }
@@ -96,6 +113,12 @@ namespace Epic7Assistant
                 while (!Globals.Cancelled)
                 {
                     InventoryCheck();
+
+                    if (gStatus)
+                    {
+                        break;
+                    }
+
                     Thread.Sleep(5000);
                     RunAP();
                 }
@@ -116,6 +139,7 @@ namespace Epic7Assistant
 
         private void RunHunt()
         {
+           
             // Looking to see if arrange is selectable or not.
 
             if (!ImageExistsOnScreen(gFilePathRepeat))
@@ -135,12 +159,12 @@ namespace Epic7Assistant
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
 
-                    /*
+                    
                     if (ImageExistsOnScreen(gFilePathEnergy))
                     {
                         EnergyCheck();
                     }
-                    */
+                    
 
                 }
                 else
@@ -154,12 +178,12 @@ namespace Epic7Assistant
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
 
-                    /*
+                    
                     if (ImageExistsOnScreen(gFilePathEnergy))
                     {
                         EnergyCheck();
                     }
-                    */
+                    
                 }
             }
         }
@@ -187,13 +211,10 @@ namespace Epic7Assistant
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
 
-                    /*
-                    string filePathEnergy = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\energy1080.png";
-                    if (ImageExistsOnScreen(filePathEnergy))
+                    if (ImageExistsOnScreen(gFilePathEnergy))
                     {
                         EnergyCheck();
                     }
-                    */
 
                 }
                 else
@@ -209,13 +230,10 @@ namespace Epic7Assistant
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
 
-                    /*
-                    string filePathEnergy = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\energy1080.png";
-                    if (ImageExistsOnScreen(filePathEnergy))
+                    if (ImageExistsOnScreen(gFilePathEnergy))
                     {
                         EnergyCheck();
                     }
-                    */
                 }
             }
         }
@@ -232,9 +250,11 @@ namespace Epic7Assistant
 
         private void EnergyCheck()
         {
-            Cursor.Position = new System.Drawing.Point(gPointX, gPointY);
+            Console.WriteLine("Purchasing Energy");
+            Cursor.Position = new System.Drawing.Point(gPointXenergy, gPointYenergy);
             Thread.Sleep(gTimeBetweenClicks);
             VirtualMouse.LeftClick();
+            Cursor.Position = new System.Drawing.Point(gPointX, gPointY);
             Thread.Sleep(gTimeBetweenClicks);
             VirtualMouse.LeftClick();
         }
@@ -244,11 +264,12 @@ namespace Epic7Assistant
             if(ImageExistsOnScreen(gFilePathInventoryFull))
             {
                 Console.WriteLine("Inventory Full. Job Complete");
-                return;
+                gStatus = true;
             }
             else
             {
                 Console.WriteLine("Inventory not Full. Moving on.");
+                gStatus = false;
             }
         }
 
