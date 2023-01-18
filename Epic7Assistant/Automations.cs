@@ -117,7 +117,7 @@ namespace Epic7Assistant
 
             if (!ImageExistsOnScreen(gFilePathRepeat))
             {
-                Console.WriteLine("We did not find the image. Battle has not ended yet.");
+                Console.WriteLine("We did not find the image. Battle has not ended yet!");
             }
             else
             {
