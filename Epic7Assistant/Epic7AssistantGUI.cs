@@ -44,11 +44,15 @@ namespace Epic7Assistant
 
         private void m_CheckBox1080_CheckedChanged(object sender, EventArgs e)
         {
-            g1080p = true;
-            g1440p = false;
-            g4k = false;
-            m_CheckBox1440.Checked = false;
-            m_CheckBox4k.Checked = false;
+       
+             g1080p = true;
+             g1440p = false;
+             g4k = false;
+             m_CheckBox1440.Checked = false;
+             m_CheckBox4k.Checked = false;
+             CheckAllFields();
+          
+            
         }
 
         private void m_CheckBox1440_CheckedChanged(object sender, EventArgs e)
@@ -58,6 +62,7 @@ namespace Epic7Assistant
             g4k = false;
             m_CheckBox1080.Checked = false;
             m_CheckBox4k.Checked = false;
+            CheckAllFields();
         }
 
         private void m_CheckBox4k_CheckedChanged(object sender, EventArgs e)
@@ -67,6 +72,7 @@ namespace Epic7Assistant
             g4k = true;
             m_CheckBox1080.Checked = false;
             m_CheckBox1440.Checked = false;
+            CheckAllFields();
         }
 
         private void m_ButtonCloseApp_Click(object sender, EventArgs e)
@@ -166,6 +172,7 @@ namespace Epic7Assistant
             m_CheckBoxAP.Checked = false;
             m_CheckBoxEvent.Checked = false;
             m_CheckBoxExped.Checked = false;
+            CheckAllFields();
         }
 
         private void m_CheckBoxAP_CheckedChanged(object sender, EventArgs e)
@@ -177,6 +184,7 @@ namespace Epic7Assistant
             m_CheckBoxHunt.Checked = false;
             m_CheckBoxEvent.Checked = false;
             m_CheckBoxExped.Checked = false;
+            CheckAllFields();
         }
 
         private void m_CheckBoxEvent_CheckedChanged(object sender, EventArgs e)
@@ -188,6 +196,7 @@ namespace Epic7Assistant
             m_CheckBoxHunt.Checked = false;
             m_CheckBoxAP.Checked = false;
             m_CheckBoxExped.Checked = false;
+            CheckAllFields();
         }
 
         private void m_CheckBoxExped_CheckedChanged(object sender, EventArgs e)
@@ -199,6 +208,7 @@ namespace Epic7Assistant
             m_CheckBoxHunt.Checked = false;
             m_CheckBoxAP.Checked = false;
             m_CheckBoxEvent.Checked = false;
+            CheckAllFields();
         }
 
         private void m_ButtonCancel_Click(object sender, EventArgs e)
@@ -216,5 +226,18 @@ namespace Epic7Assistant
         {
             m_PanelAuto.BringToFront();
         }
+
+        private void CheckAllFields()
+        {
+            if((m_CheckBox1080.Checked == true || m_CheckBox1440.Checked == true || m_CheckBox4k.Checked == true) && (m_CheckBoxHunt.Checked == true || m_CheckBoxAP.Checked == true || m_CheckBoxEvent.Checked == true || m_CheckBoxExped.Checked == true))
+            {
+                m_ButtonRun.Enabled = true;
+            }
+            else
+            {
+                m_ButtonRun.Enabled = false;
+            }
+        }
+
     }
 }
