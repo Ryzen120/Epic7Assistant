@@ -21,6 +21,12 @@ namespace Epic7Assistant
         public static string filePathFailed1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\helpDetailed1080.png";
         public static string filePathEnergy1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\energy1080.png";
         public static string filePathInventory1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\inventoryFull1080.png";
+        public static string filePathExpedEnter1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\expedEnter1080.png";
+        public static string filePathExpedOver1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\expedOver1080.png";
+        public static string filePathExpedDamage1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\expedDamage1080.png";
+        public static string filePathExpedVictory1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\expedVictory1080.png";
+        public static string filePathExpedConfirm1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\expedConfirm1080.png";
+        public static string filePathExpedDamageRanking1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\expedDamageRanking1080.png";
 
         //1440
         public static int PointX1440 = 1710;

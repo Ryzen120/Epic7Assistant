@@ -33,11 +33,18 @@ namespace Epic7Assistant
         int gPointY;
         int gPointXenergy;
         int gPointYenergy;
+        int gCycleCounter;
 
         string gFilePathRepeat;
         string gFilePathFailed;
         string gFilePathInventoryFull;
         string gFilePathEnergy;
+        string gFilePathExpedOver;
+        string gFilePathExpedDamage;
+        string gFilePathExpedEnter;
+        string gFilePathExpedVictory;
+        string gFilePathExpedConfirm;
+        string gFilePathExpedDamageRanking;
 
 
         public Automations(Epic7AssistantGUI gui, bool hunt, bool ap, bool events, bool expeditions, bool resolution1080, bool resolution1440, bool resolution4k)
@@ -49,11 +56,12 @@ namespace Epic7Assistant
             g1080p = resolution1080;
             g1440p = resolution1440;
             g4k = resolution4k;
-            gTimeBetweenClicks = 4000;
+            gTimeBetweenClicks = 5000;
             gStatus = false;
+            gCycleCounter = 0;
 
             // Set resolutions
-            if(g1080p)
+            if (g1080p)
             {
                 gPointX = Globals.PointX1080;
                 gPointY = Globals.PointY1080;
@@ -63,6 +71,12 @@ namespace Epic7Assistant
                 gFilePathFailed = Globals.filePathFailed1080;
                 gFilePathInventoryFull = Globals.filePathInventory1080;
                 gFilePathEnergy = Globals.filePathEnergy1080;
+                gFilePathExpedOver = Globals.filePathExpedOver1080;
+                gFilePathExpedDamage = Globals.filePathExpedDamage1080;
+                gFilePathExpedEnter = Globals.filePathExpedEnter1080;
+                gFilePathExpedVictory = Globals.filePathExpedVictory1080;
+                gFilePathExpedConfirm = Globals.filePathExpedConfirm1080;
+                gFilePathExpedDamageRanking = Globals.filePathExpedDamageRanking1080;
             }
             else if(g1440p)
             {
@@ -132,22 +146,35 @@ namespace Epic7Assistant
             }
             else if(gExped)
             {
-                // Run Expedition function
-                RunExpeditions();
+                // Run Exped function
+                while (!Globals.Cancelled)
+                {
+
+                    if (gStatus)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(5000);
+                    RunExpeditions();
+                }
+
+                Console.WriteLine("Run complete!");
             }
         }
 
         private void RunHunt()
         {
-           
             // Looking to see if arrange is selectable or not.
 
             if (!ImageExistsOnScreen(gFilePathRepeat))
             {
-                Console.WriteLine("We did not find the image. Battle has not ended yet!");
+                //Console.WriteLine("We did not find the image. Battle has not ended yet!");
             }
             else
             {
+                gCycleCounter++;
+                Console.WriteLine("Total Cycle Count: " + gCycleCounter);
 
                 if (ImageExistsOnScreen(gFilePathFailed))
                 {
@@ -158,10 +185,11 @@ namespace Epic7Assistant
                     VirtualMouse.LeftClick();
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
+                    Thread.Sleep(gTimeBetweenClicks);
 
-                    
                     if (ImageExistsOnScreen(gFilePathEnergy))
                     {
+                        Console.WriteLine("We found energy button.");
                         EnergyCheck();
                     }
                     
@@ -177,10 +205,12 @@ namespace Epic7Assistant
                     VirtualMouse.LeftClick();
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
+                    Thread.Sleep(gTimeBetweenClicks);
 
-                    
+
                     if (ImageExistsOnScreen(gFilePathEnergy))
                     {
+                        Console.WriteLine("We found energy button.");
                         EnergyCheck();
                     }
                     
@@ -210,6 +240,7 @@ namespace Epic7Assistant
                     VirtualMouse.LeftClick();
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
+                    Thread.Sleep(gTimeBetweenClicks);
 
                     if (ImageExistsOnScreen(gFilePathEnergy))
                     {
@@ -229,6 +260,7 @@ namespace Epic7Assistant
                     VirtualMouse.LeftClick();
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
+                    Thread.Sleep(gTimeBetweenClicks);
 
                     if (ImageExistsOnScreen(gFilePathEnergy))
                     {
@@ -246,6 +278,218 @@ namespace Epic7Assistant
         private void RunExpeditions()
         {
 
+            // Click the open recruitment tab
+            Cursor.Position = new System.Drawing.Point(1400, 250);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+
+            // Click on level 2
+            Cursor.Position = new System.Drawing.Point(1100, 330);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+
+            // Click on Refresh
+            Cursor.Position = new System.Drawing.Point(1750, 330);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+            Thread.Sleep(3000);
+
+            // While there is NOT an enter on the screen, we refresh and wait.
+            while(!ImageExistsOnScreen(gFilePathExpedEnter))
+            {
+                Console.WriteLine("Refresh did not populate an battle. Lets try again and check.");
+                Thread.Sleep(10000);
+
+                // Click on Refresh
+                Cursor.Position = new System.Drawing.Point(1750, 330);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+
+            }
+
+            // Click on first one
+            Cursor.Position = new System.Drawing.Point(1750, 480);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+            Thread.Sleep(1000);
+            VirtualMouse.LeftClick();
+
+            if (ExpedOverCheck())
+            {
+                return;
+            }
+
+            // While we did not see a damage ranking come up after clicking the first one. Lets try to refresh broken button
+            while (!ImageExistsOnScreen(gFilePathExpedDamageRanking))
+            {
+                // Click on private tab
+                Cursor.Position = new System.Drawing.Point(1200, 250);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+
+                Thread.Sleep(1000);
+
+                // Click the open recruitment tab
+                Cursor.Position = new System.Drawing.Point(1400, 250);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+
+                // Click on Refresh
+                Cursor.Position = new System.Drawing.Point(1750, 330);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+                Thread.Sleep(3000);
+
+                // Click on first one
+                Cursor.Position = new System.Drawing.Point(1750, 480);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+                Thread.Sleep(1000);
+                VirtualMouse.LeftClick();
+
+                if (ExpedOverCheck())
+                {
+                    return;
+                }
+            }
+
+            if (ExpedOverCheck())
+            {
+                return;
+            }
+
+
+            // Now click ready
+            Cursor.Position = new System.Drawing.Point(1710, 1000);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+
+            if(ExpedOverCheck())
+            {
+                return;
+            }
+
+            // Now click start
+            Cursor.Position = new System.Drawing.Point(1710, 1000);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+
+            if (ExpedOverCheck())
+            {
+                return;
+            }
+
+            int i = 0;
+            // Keep clicking start until it works.
+            while (!ImageExistsOnScreen(gFilePathExpedConfirm))
+            {
+                Thread.Sleep(1000);
+                i++;
+
+                // Now click start
+                Cursor.Position = new System.Drawing.Point(1710, 1000);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+
+                if(i > 10)
+                {
+                    Console.WriteLine("Someone went wrong and fell out of sync... fixing...");
+                    return;
+                }
+            }
+
+            if (ExpedOverCheck())
+            {
+                return;
+            }
+
+            // Now click confirm
+            Cursor.Position = new System.Drawing.Point(950, 800);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+            Thread.Sleep(1000);
+
+            if (ExpedOverCheck())
+            {
+                return;
+            }
+
+            int j = 0;
+            // Keep clicking confirm until it works.
+            while (ImageExistsOnScreen(gFilePathExpedConfirm))
+            {
+                Thread.Sleep(1000);
+                j++;
+
+                // Now click confirm
+                Cursor.Position = new System.Drawing.Point(950, 800);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+
+                if (j > 10)
+                {
+                    Console.WriteLine("Someone went wrong and fell out of sync... fixing...");
+                    return;
+                }
+            }
+
+            if (ExpedOverCheck())
+            {
+                return;
+            }
+
+            // Wait for battle
+            while (!ImageExistsOnScreen(gFilePathExpedDamage))
+            {
+                //TODO Add check for something that tells us we are on the wrong screen and return. This should help us reset
+
+                Thread.Sleep(10000);
+                Console.WriteLine("Battle running...");
+            }
+
+            Console.WriteLine("Detected completed battle!");
+
+            // Now click Confirm (bottom right)
+            Cursor.Position = new System.Drawing.Point(1710, 1000);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+            Thread.Sleep(1000);
+
+            // Check for victory box
+            if (ImageExistsOnScreen(gFilePathExpedVictory))
+            {
+                // Now click close
+                Cursor.Position = new System.Drawing.Point(950, 800);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+            }
+            else
+            {
+                // Now click back out of exped, might just let it time out instead. We shall test
+                Cursor.Position = new System.Drawing.Point(40, 40);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+            }
+
+        }
+
+        private bool ExpedOverCheck()
+        {
+            Thread.Sleep(2000);
+
+            // Check for Exped over message
+            if (ImageExistsOnScreen(gFilePathExpedOver) || ImageExistsOnScreen(gFilePathExpedVictory))
+            {
+                Console.WriteLine("Exped was over...");
+
+                Cursor.Position = new System.Drawing.Point(950, 800);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+
+                return true;
+            }
+
+            return false;
         }
 
         private void EnergyCheck()
@@ -257,6 +501,7 @@ namespace Epic7Assistant
             Cursor.Position = new System.Drawing.Point(gPointX, gPointY);
             Thread.Sleep(gTimeBetweenClicks);
             VirtualMouse.LeftClick();
+            Thread.Sleep(gTimeBetweenClicks);
         }
 
         private void InventoryCheck()
@@ -268,7 +513,7 @@ namespace Epic7Assistant
             }
             else
             {
-                Console.WriteLine("Inventory not Full. Moving on.");
+                //Console.WriteLine("Inventory not Full. Moving on.");
                 gStatus = false;
             }
         }

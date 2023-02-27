@@ -31,6 +31,7 @@ namespace Epic7Assistant
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Epic7AssistantGUI));
             this.m_PanelTitleBar = new System.Windows.Forms.Panel();
+            this.m_PictureBox = new System.Windows.Forms.PictureBox();
             this.m_ButtonCloseApp = new System.Windows.Forms.Button();
             this.m_ButtonMinimize = new System.Windows.Forms.Button();
             this.m_LabelTitle = new System.Windows.Forms.Label();
@@ -54,12 +55,11 @@ namespace Epic7Assistant
             this.m_CheckBox1440 = new System.Windows.Forms.CheckBox();
             this.m_CheckBox1080 = new System.Windows.Forms.CheckBox();
             this.m_ButtonRun = new System.Windows.Forms.Button();
-            this.m_PictureBox = new System.Windows.Forms.PictureBox();
             this.m_PanelTitleBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBox)).BeginInit();
             this.panel1.SuspendLayout();
             this.m_PanelLogs.SuspendLayout();
             this.m_PanelAuto.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // m_PanelTitleBar
@@ -77,6 +77,17 @@ namespace Epic7Assistant
             this.m_PanelTitleBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.m_PanelTitleBar_MouseDown);
             this.m_PanelTitleBar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.m_PanelTitleBar_MouseMove);
             this.m_PanelTitleBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.m_PanelTitleBar_MouseUp);
+            // 
+            // m_PictureBox
+            // 
+            this.m_PictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.m_PictureBox.Image = ((System.Drawing.Image)(resources.GetObject("m_PictureBox.Image")));
+            this.m_PictureBox.Location = new System.Drawing.Point(-3, 1);
+            this.m_PictureBox.Name = "m_PictureBox";
+            this.m_PictureBox.Size = new System.Drawing.Size(102, 70);
+            this.m_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.m_PictureBox.TabIndex = 6;
+            this.m_PictureBox.TabStop = false;
             // 
             // m_ButtonCloseApp
             // 
@@ -341,17 +352,6 @@ namespace Epic7Assistant
             this.m_ButtonRun.UseVisualStyleBackColor = true;
             this.m_ButtonRun.Click += new System.EventHandler(this.m_ButtonRun_Click);
             // 
-            // m_PictureBox
-            // 
-            this.m_PictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.m_PictureBox.Image = ((System.Drawing.Image)(resources.GetObject("m_PictureBox.Image")));
-            this.m_PictureBox.Location = new System.Drawing.Point(-3, 1);
-            this.m_PictureBox.Name = "m_PictureBox";
-            this.m_PictureBox.Size = new System.Drawing.Size(102, 70);
-            this.m_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.m_PictureBox.TabIndex = 6;
-            this.m_PictureBox.TabStop = false;
-            // 
             // Epic7AssistantGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -368,12 +368,12 @@ namespace Epic7Assistant
             this.Text = "Form1";
             this.m_PanelTitleBar.ResumeLayout(false);
             this.m_PanelTitleBar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBox)).EndInit();
             this.panel1.ResumeLayout(false);
             this.m_PanelLogs.ResumeLayout(false);
             this.m_PanelLogs.PerformLayout();
             this.m_PanelAuto.ResumeLayout(false);
             this.m_PanelAuto.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }

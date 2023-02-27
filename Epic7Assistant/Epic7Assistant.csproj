@@ -120,6 +120,21 @@
   <ItemGroup>
     <None Include="Resources\energy1080.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\expedDamage1080.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\expedEnter1080.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\expedOver1080.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\expedConfirm1080.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\expedDamageRanking1080.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
