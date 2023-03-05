@@ -63,6 +63,16 @@ namespace Epic7Assistant.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bookmarkSmall1080 {
+            get {
+                object obj = ResourceManager.GetObject("bookmarkSmall1080", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap energy1080 {
             get {
                 object obj = ResourceManager.GetObject("energy1080", resourceCulture);
@@ -143,9 +153,39 @@ namespace Epic7Assistant.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap mysticsSmaller1080 {
+            get {
+                object obj = ResourceManager.GetObject("mysticsSmaller1080", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap repeatEnded1080 {
             get {
                 object obj = ResourceManager.GetObject("repeatEnded1080", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap shopBuy1080 {
+            get {
+                object obj = ResourceManager.GetObject("shopBuy1080", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap shopCancel1080 {
+            get {
+                object obj = ResourceManager.GetObject("shopCancel1080", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

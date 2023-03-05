@@ -135,6 +135,18 @@
   <ItemGroup>
     <None Include="Resources\expedDamageRanking1080.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bookmarkSmall1080.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mysticsSmaller1080.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shopBuy1080.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shopCancel1080.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

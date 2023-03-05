@@ -33,6 +33,7 @@ namespace Epic7Assistant
         bool gAP;
         bool gEvent;
         bool gExped;
+        bool gShopRef;
 
         public Epic7AssistantGUI()
         {
@@ -153,7 +154,7 @@ namespace Epic7Assistant
         {
             Globals.Cancelled = false;
 
-            Task task1 = Task.Factory.StartNew(() => new Automations(this, gHunt, gAP, gEvent, gExped, g1080p, g1440p, g4k));
+            Task task1 = Task.Factory.StartNew(() => new Automations(this, gHunt, gAP, gEvent, gExped, gShopRef, g1080p, g1440p, g4k));
 
         }
 
@@ -215,6 +216,11 @@ namespace Epic7Assistant
         private void m_ButtonAuto_Click(object sender, EventArgs e)
         {
             m_PanelAuto.BringToFront();
+        }
+
+        private void m_CheckBoxShopRefresh_CheckedChanged(object sender, EventArgs e)
+        {
+            gShopRef = true;
         }
     }
 }

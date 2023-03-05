@@ -23,10 +23,15 @@ namespace Epic7Assistant
         bool gAP;
         bool gEvent;
         bool gExped;
+        bool gShopRef;
         bool g1080p;
         bool g1440p;
         bool g4k;
         bool gStatus;
+        bool gItemFoundInShop;
+        bool gBailOut;
+        bool gBookmarkPurchased;
+        bool gMysticPurchased;
 
         int gTimeBetweenClicks;
         int gPointX;
@@ -34,6 +39,15 @@ namespace Epic7Assistant
         int gPointXenergy;
         int gPointYenergy;
         int gCycleCounter;
+        int gBookmarkCount;
+        int gMysticCount;
+        int gRefreshCount;
+
+        double gXCoord;
+        double gYCoord;
+
+        OpenCvSharp.Point gXPoint;
+        OpenCvSharp.Point gPointOfItem;
 
         string gFilePathRepeat;
         string gFilePathFailed;
@@ -47,12 +61,13 @@ namespace Epic7Assistant
         string gFilePathExpedDamageRanking;
 
 
-        public Automations(Epic7AssistantGUI gui, bool hunt, bool ap, bool events, bool expeditions, bool resolution1080, bool resolution1440, bool resolution4k)
+        public Automations(Epic7AssistantGUI gui, bool hunt, bool ap, bool events, bool expeditions, bool shopRef, bool resolution1080, bool resolution1440, bool resolution4k)
         {
             gHunt = hunt;
             gAP = ap;
             gEvent = events;
             gExped = expeditions;
+            gShopRef = shopRef;
             g1080p = resolution1080;
             g1440p = resolution1440;
             g4k = resolution4k;
@@ -157,6 +172,54 @@ namespace Epic7Assistant
 
                     Thread.Sleep(5000);
                     RunExpeditions();
+                }
+
+                Console.WriteLine("Run complete!");
+            }
+            else if(gShopRef)
+            {
+                gTimeBetweenClicks = 1000;
+
+                // Run Exped function
+                while (!Globals.Cancelled)
+                {
+                    gBailOut = false;
+                    gBookmarkPurchased = false;
+                    gMysticPurchased = false;
+
+                    if (gStatus)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(5000);
+
+                    // Run the shop refresh checks and purchase on the opening screen
+                    RunShopRefresh();
+
+                    if(gBailOut)
+                    {
+                        break;
+                    }
+
+                    // Scroll the screen down regardless if we found anything
+                    ScrollScreen();
+
+                    // Check the bottom of the screen for anything
+                    RunShopRefresh();
+
+                    if (gBailOut)
+                    {
+                        break;
+                    }
+
+                    Console.WriteLine("");
+                    Console.WriteLine("Bookmarks found: " + gBookmarkCount.ToString());
+                    Console.WriteLine("Mystics found: " + gMysticCount.ToString());
+                    Console.WriteLine("");
+
+                    // Finally refresh the shop.
+                    RefreshShop();
                 }
 
                 Console.WriteLine("Run complete!");
@@ -275,6 +338,292 @@ namespace Epic7Assistant
 
         }
 
+        private void RunShopRefresh()
+        {
+            gItemFoundInShop = false;
+
+            // Check if we have bookmarks and / or mystics on the current screen
+            bool bookmark = ImageExistsOnScreen(Globals.filePathShopBookmark1080);
+            bool mystics = ImageExistsOnScreen(Globals.filePathShopMystics1080);
+
+            // Found both
+            if (bookmark && mystics)
+            {
+                gItemFoundInShop = true;
+
+                // Increment both
+                gBookmarkCount++;
+                gMysticCount++;
+
+                Console.WriteLine("Bookmark AND mystics found!");
+
+                // Get the current coords for the bookmark
+                ImageExistsOnScreen(Globals.filePathShopBookmark1080);
+
+                // Set coords for bookmark
+                int x = gPointOfItem.X;
+                int y = gPointOfItem.Y;
+
+                //Set our cursor to the top left of the item icon. 853 / 371
+                Cursor.Position = new System.Drawing.Point(x, y);
+                Thread.Sleep(gTimeBetweenClicks);
+
+                // This is the location for its respective button
+                // So in this case, its add 847 to go over to the right as much as we need. 1700 og
+                // Then for down adjustment, add 79/ 450 og
+                Cursor.Position = new System.Drawing.Point(x + 847, y + 79);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+                Thread.Sleep(gTimeBetweenClicks);
+
+
+                int maxPurchase = 0;
+                // Check if buy showed up. Just in case buy button failed to recognize click
+                while(!ImageExistsOnScreen(Globals.filePathShopCancel1080))
+                {
+
+                    if (gBookmarkPurchased)
+                    {
+                        Console.WriteLine("Click did not work because we already purchased that bookmark.");
+                        break;
+                    }
+
+                    // While we dont see the buy button, try again 
+                    maxPurchase++;
+                    Cursor.Position = new System.Drawing.Point(x + 847, y + 79);
+                    Thread.Sleep(gTimeBetweenClicks);
+                    VirtualMouse.LeftClick();
+
+                    if(maxPurchase > 12)
+                    {
+                        gBailOut = true;
+                        break;
+                    }
+                }
+
+                if(gBailOut)
+                {
+                    Console.WriteLine("Something went wrong, gotta bail out.");
+                    return;
+                }
+
+                // Buy the bookmark
+                ClickPurchaseButton();
+                Thread.Sleep(1000);
+
+                int maxTries = 0;
+                // Lets check for cancel still.
+                while (ImageExistsOnScreen(Globals.filePathShopCancel1080))
+                {
+                    Console.WriteLine("Final purchase click didnt work.. trying again");
+                    // While we dont see the buy button, try again 
+                    maxTries++;
+
+                    ClickPurchaseButton();
+
+                    if (maxTries > 12)
+                    {
+                        gBailOut = true;
+                        break;
+                    }
+                }
+
+                if (gBailOut)
+                {
+                    Console.WriteLine("Something went wrong, gotta bail out.");
+                    return;
+                }
+
+                gBookmarkPurchased = true;
+
+                // Since this is double we need to grab the mystics
+                ImageExistsOnScreen(Globals.filePathShopMystics1080);
+
+                // Set coords to mystic now
+                x = gPointOfItem.X;
+                y = gPointOfItem.Y;
+
+                // Set our cursor to the top left of the item icon.
+                Cursor.Position = new System.Drawing.Point(x, y);
+                Thread.Sleep(gTimeBetweenClicks);
+
+                // Now move to the buy button for it
+                Cursor.Position = new System.Drawing.Point(x + 847, y + 79);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+                Thread.Sleep(gTimeBetweenClicks);
+
+                int maxPurchaseTwo = 0;
+                // Check if buy showed up. Just in case buy button failed to recognize click
+                while (!ImageExistsOnScreen(Globals.filePathShopCancel1080))
+                {
+                    if (gMysticPurchased)
+                    {
+                        Console.WriteLine("Click did not work because we already purchased that mystic.");
+                        break;
+                    }
+
+                    // While we dont see the buy button, try again 
+                    maxPurchaseTwo++;
+                    Cursor.Position = new System.Drawing.Point(x + 847, y + 79);
+                    Thread.Sleep(gTimeBetweenClicks);
+                    VirtualMouse.LeftClick();
+
+                    if (maxPurchaseTwo > 12)
+                    {
+                        gBailOut = true;
+                        break;
+                    }
+                }
+
+                if (gBailOut)
+                {
+                    Console.WriteLine("Something went wrong, gotta bail out.");
+                    return;
+                }
+
+                // Buy the mystics
+                ClickPurchaseButton();
+                Thread.Sleep(1000);
+
+                int maxTriesTwo = 0;
+                // Lets check for cancel still.
+                while (ImageExistsOnScreen(Globals.filePathShopCancel1080))
+                {
+                    Console.WriteLine("Final purchase click didnt work.. trying again");
+                    // While we dont see the buy button, try again 
+                    maxTriesTwo++;
+
+                    ClickPurchaseButton();
+
+                    if (maxTriesTwo > 12)
+                    {
+                        gBailOut = true;
+                        break;
+                    }
+                }
+
+                if (gBailOut)
+                {
+                    Console.WriteLine("Something went wrong, gotta bail out.");
+                    return;
+                }
+
+                gMysticPurchased = true;
+            }
+            // Found one or the other
+            else if (bookmark || mystics)
+            {
+                gItemFoundInShop = true;
+
+                int x;
+                int y;
+
+                if (bookmark)
+                {
+                    Console.WriteLine("Bookmark found!");
+                    bookmark = ImageExistsOnScreen(Globals.filePathShopBookmark1080);
+
+                    // Set coords
+                    x = gPointOfItem.X;
+                    y = gPointOfItem.Y;
+                    gBookmarkCount++;
+                }
+                else
+                {
+                    Console.WriteLine("Mystic found!");
+                    mystics = ImageExistsOnScreen(Globals.filePathShopMystics1080);
+
+                    // Set coords
+                    x = gPointOfItem.X;
+                    y = gPointOfItem.Y;
+                    gMysticCount++;
+                }
+
+                //Set our cursor to the top left of the item icon. 853 / 371
+                Cursor.Position = new System.Drawing.Point(x, y);
+                Thread.Sleep(gTimeBetweenClicks);
+
+                // This is the location for its respective button
+                // So in this case, its add 847 to go over to the right as much as we need. 1700 og
+                // Then for down adjustment, add 79/ 450 og
+                Cursor.Position = new System.Drawing.Point(x + 847, y + 79);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+                Thread.Sleep(gTimeBetweenClicks);
+
+                int maxPurchaseTwo = 0;
+                // Check if buy showed up. Just in case buy button failed to recognize click
+                while (!ImageExistsOnScreen(Globals.filePathShopCancel1080))
+                {
+                    if(gMysticPurchased || gBookmarkPurchased)
+                    {
+                        Console.WriteLine("Click did not work because we already purchased that item.");
+                        break;
+                    }
+
+                    // While we dont see the buy button, try again 
+                    Console.WriteLine("Click failed trying again");
+                    maxPurchaseTwo++;
+                    Cursor.Position = new System.Drawing.Point(x + 847, y + 79);
+                    Thread.Sleep(gTimeBetweenClicks);
+                    VirtualMouse.LeftClick();
+
+                    if (maxPurchaseTwo > 12)
+                    {
+                        gBailOut = true;
+                        break;
+                    }
+                }
+
+                if (gBailOut)
+                {
+                    Console.WriteLine("Something went wrong, gotta bail out.");
+                    return;
+                }
+
+                // Buy the item
+                ClickPurchaseButton();
+                Thread.Sleep(1000);
+
+                int maxTries = 0;
+                // Lets check for cancel still.
+                while (ImageExistsOnScreen(Globals.filePathShopCancel1080))
+                {
+                    Console.WriteLine("Final purchase click didnt work.. trying again");
+                    // While we dont see the buy button, try again 
+                    maxTries++;
+
+                    ClickPurchaseButton();
+
+                    if (maxTries > 12)
+                    {
+                        gBailOut = true;
+                        break;
+                    }
+                }
+
+                if (gBailOut)
+                {
+                    Console.WriteLine("Something went wrong, gotta bail out.");
+                    return;
+                }
+
+                if (bookmark)
+                {
+                    gBookmarkPurchased = true;
+                }
+                {
+                    gMysticPurchased = true;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Did not find any bookmarks or mystics...");
+                gItemFoundInShop = false;
+            }
+        }
+
         private void RunExpeditions()
         {
 
@@ -304,6 +653,8 @@ namespace Epic7Assistant
                 Cursor.Position = new System.Drawing.Point(1750, 330);
                 Thread.Sleep(gTimeBetweenClicks);
                 VirtualMouse.LeftClick();
+
+                Thread.Sleep(3000);
 
             }
 
@@ -473,6 +824,42 @@ namespace Epic7Assistant
 
         }
 
+        private void RefreshShop()
+        {
+            // Refresh location
+            Cursor.Position = new System.Drawing.Point(330, 975);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+
+            // Confirm location
+            Cursor.Position = new System.Drawing.Point(1050, 650);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+
+            gRefreshCount++;
+
+            Console.WriteLine("We have refreshed a total of " + gRefreshCount.ToString() + " times.");
+        }
+
+        private void ClickPurchaseButton()
+        {
+            // final purchase button
+            Cursor.Position = new System.Drawing.Point(1000, 780);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+        }
+
+        private void ScrollScreen()
+        {
+            Console.WriteLine("Scrolling...");
+            Cursor.Position = new System.Drawing.Point(1000, 780);
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.LeftClick();
+            Thread.Sleep(gTimeBetweenClicks);
+            VirtualMouse.WheelDown();
+            Thread.Sleep(3000);
+        }
+
         private bool ExpedOverCheck()
         {
             Thread.Sleep(2000);
@@ -539,6 +926,7 @@ namespace Epic7Assistant
                     Cv2.CvtColor(screen, screenGray, ColorConversionCodes.BGRA2GRAY);
                     Mat result = new Mat();
                     Cv2.MatchTemplate(screenGray, image, result, TemplateMatchModes.CCoeffNormed);
+                    Cv2.MinMaxLoc(result, out gXCoord, out gYCoord, out gXPoint, out gPointOfItem);
                     Cv2.Threshold(result, result, 0.9, 1.0, ThresholdTypes.Tozero);
 
                     screen.Dispose();
@@ -567,6 +955,7 @@ namespace Epic7Assistant
             private const int MOUSEEVENTF_MIDDLEDOWN = 0x0020;
             private const int MOUSEEVENTF_MIDDLEUP = 0x0040;
             private const int MOUSEEVENTF_ABSOLUTE = 0x8000;
+            private const int MOUSEEVENTF_WHEEL = 0x0800;
             public static void Move(int xDelta, int yDelta)
             {
                 mouse_event(MOUSEEVENTF_MOVE, xDelta, yDelta, 0, 0);
@@ -605,6 +994,11 @@ namespace Epic7Assistant
             public static void RightUp()
             {
                 mouse_event(MOUSEEVENTF_RIGHTUP, System.Windows.Forms.Control.MousePosition.X, System.Windows.Forms.Control.MousePosition.Y, 0, 0);
+            }
+
+            public static void WheelDown()
+            {
+                mouse_event(MOUSEEVENTF_WHEEL, 0, 0, -120, 0);
             }
         }
 
