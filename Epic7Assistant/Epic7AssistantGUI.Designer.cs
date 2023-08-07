@@ -31,6 +31,7 @@ namespace Epic7Assistant
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Epic7AssistantGUI));
             this.m_PanelTitleBar = new System.Windows.Forms.Panel();
+            this.m_PictureBox = new System.Windows.Forms.PictureBox();
             this.m_ButtonCloseApp = new System.Windows.Forms.Button();
             this.m_ButtonMinimize = new System.Windows.Forms.Button();
             this.m_LabelTitle = new System.Windows.Forms.Label();
@@ -41,6 +42,7 @@ namespace Epic7Assistant
             this.m_LabelLoggingOutput = new System.Windows.Forms.Label();
             this.m_RichTextBoxLoggingOutput = new System.Windows.Forms.RichTextBox();
             this.m_PanelAuto = new System.Windows.Forms.Panel();
+            this.m_CheckBoxShopRefresh = new System.Windows.Forms.CheckBox();
             this.m_LabelStepFour = new System.Windows.Forms.Label();
             this.m_LabelStepThree = new System.Windows.Forms.Label();
             this.m_LabelStepTwo = new System.Windows.Forms.Label();
@@ -54,13 +56,13 @@ namespace Epic7Assistant
             this.m_CheckBox1440 = new System.Windows.Forms.CheckBox();
             this.m_CheckBox1080 = new System.Windows.Forms.CheckBox();
             this.m_ButtonRun = new System.Windows.Forms.Button();
-            this.m_PictureBox = new System.Windows.Forms.PictureBox();
-            this.m_CheckBoxShopRefresh = new System.Windows.Forms.CheckBox();
+            this.m_LabelRunning = new System.Windows.Forms.Label();
+            this.m_LabelStepFive = new System.Windows.Forms.Label();
             this.m_PanelTitleBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBox)).BeginInit();
             this.panel1.SuspendLayout();
             this.m_PanelLogs.SuspendLayout();
             this.m_PanelAuto.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // m_PanelTitleBar
@@ -78,6 +80,17 @@ namespace Epic7Assistant
             this.m_PanelTitleBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.m_PanelTitleBar_MouseDown);
             this.m_PanelTitleBar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.m_PanelTitleBar_MouseMove);
             this.m_PanelTitleBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.m_PanelTitleBar_MouseUp);
+            // 
+            // m_PictureBox
+            // 
+            this.m_PictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.m_PictureBox.Image = ((System.Drawing.Image)(resources.GetObject("m_PictureBox.Image")));
+            this.m_PictureBox.Location = new System.Drawing.Point(-3, 1);
+            this.m_PictureBox.Name = "m_PictureBox";
+            this.m_PictureBox.Size = new System.Drawing.Size(102, 70);
+            this.m_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.m_PictureBox.TabIndex = 6;
+            this.m_PictureBox.TabStop = false;
             // 
             // m_ButtonCloseApp
             // 
@@ -186,6 +199,8 @@ namespace Epic7Assistant
             this.m_PanelAuto.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_PanelAuto.BackColor = System.Drawing.Color.Silver;
+            this.m_PanelAuto.Controls.Add(this.m_LabelStepFive);
+            this.m_PanelAuto.Controls.Add(this.m_LabelRunning);
             this.m_PanelAuto.Controls.Add(this.m_CheckBoxShopRefresh);
             this.m_PanelAuto.Controls.Add(this.m_LabelStepFour);
             this.m_PanelAuto.Controls.Add(this.m_LabelStepThree);
@@ -204,6 +219,17 @@ namespace Epic7Assistant
             this.m_PanelAuto.Name = "m_PanelAuto";
             this.m_PanelAuto.Size = new System.Drawing.Size(1219, 683);
             this.m_PanelAuto.TabIndex = 44;
+            // 
+            // m_CheckBoxShopRefresh
+            // 
+            this.m_CheckBoxShopRefresh.AutoSize = true;
+            this.m_CheckBoxShopRefresh.Location = new System.Drawing.Point(48, 337);
+            this.m_CheckBoxShopRefresh.Name = "m_CheckBoxShopRefresh";
+            this.m_CheckBoxShopRefresh.Size = new System.Drawing.Size(91, 17);
+            this.m_CheckBoxShopRefresh.TabIndex = 42;
+            this.m_CheckBoxShopRefresh.Text = "Shop Refresh";
+            this.m_CheckBoxShopRefresh.UseVisualStyleBackColor = true;
+            this.m_CheckBoxShopRefresh.CheckedChanged += new System.EventHandler(this.m_CheckBoxShopRefresh_CheckedChanged);
             // 
             // m_LabelStepFour
             // 
@@ -239,15 +265,15 @@ namespace Epic7Assistant
             // 
             this.m_LabelStepOne.AutoSize = true;
             this.m_LabelStepOne.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_LabelStepOne.Location = new System.Drawing.Point(26, 33);
+            this.m_LabelStepOne.Location = new System.Drawing.Point(26, 23);
             this.m_LabelStepOne.Name = "m_LabelStepOne";
-            this.m_LabelStepOne.Size = new System.Drawing.Size(653, 16);
+            this.m_LabelStepOne.Size = new System.Drawing.Size(727, 32);
             this.m_LabelStepOne.TabIndex = 38;
-            this.m_LabelStepOne.Text = "1. Go to Windows settings -> Display -> Set monitor where BlueStacks will run to " +
-    "main display. ";
+            this.m_LabelStepOne.Text = resources.GetString("m_LabelStepOne.Text");
             // 
             // m_ButtonCancel
             // 
+            this.m_ButtonCancel.Enabled = false;
             this.m_ButtonCancel.Location = new System.Drawing.Point(626, 585);
             this.m_ButtonCancel.Name = "m_ButtonCancel";
             this.m_ButtonCancel.Size = new System.Drawing.Size(104, 30);
@@ -270,11 +296,12 @@ namespace Epic7Assistant
             // m_CheckBoxEvent
             // 
             this.m_CheckBoxEvent.AutoSize = true;
+            this.m_CheckBoxEvent.Enabled = false;
             this.m_CheckBoxEvent.Location = new System.Drawing.Point(48, 291);
             this.m_CheckBoxEvent.Name = "m_CheckBoxEvent";
-            this.m_CheckBoxEvent.Size = new System.Drawing.Size(54, 17);
+            this.m_CheckBoxEvent.Size = new System.Drawing.Size(163, 17);
             this.m_CheckBoxEvent.TabIndex = 34;
-            this.m_CheckBoxEvent.Text = "Event";
+            this.m_CheckBoxEvent.Text = "Event - - Not Yet Suppported";
             this.m_CheckBoxEvent.UseVisualStyleBackColor = true;
             this.m_CheckBoxEvent.CheckedChanged += new System.EventHandler(this.m_CheckBoxEvent_CheckedChanged);
             // 
@@ -303,22 +330,24 @@ namespace Epic7Assistant
             // m_CheckBox4k
             // 
             this.m_CheckBox4k.AutoSize = true;
+            this.m_CheckBox4k.Enabled = false;
             this.m_CheckBox4k.Location = new System.Drawing.Point(48, 182);
             this.m_CheckBox4k.Name = "m_CheckBox4k";
-            this.m_CheckBox4k.Size = new System.Drawing.Size(39, 17);
+            this.m_CheckBox4k.Size = new System.Drawing.Size(142, 17);
             this.m_CheckBox4k.TabIndex = 30;
-            this.m_CheckBox4k.Text = "4K";
+            this.m_CheckBox4k.Text = "4K - Not Yet Suppported";
             this.m_CheckBox4k.UseVisualStyleBackColor = true;
             this.m_CheckBox4k.CheckedChanged += new System.EventHandler(this.m_CheckBox4k_CheckedChanged);
             // 
             // m_CheckBox1440
             // 
             this.m_CheckBox1440.AutoSize = true;
+            this.m_CheckBox1440.Enabled = false;
             this.m_CheckBox1440.Location = new System.Drawing.Point(48, 158);
             this.m_CheckBox1440.Name = "m_CheckBox1440";
-            this.m_CheckBox1440.Size = new System.Drawing.Size(56, 17);
+            this.m_CheckBox1440.Size = new System.Drawing.Size(159, 17);
             this.m_CheckBox1440.TabIndex = 29;
-            this.m_CheckBox1440.Text = "1440p";
+            this.m_CheckBox1440.Text = "1440p - Not Yet Suppported";
             this.m_CheckBox1440.UseVisualStyleBackColor = true;
             this.m_CheckBox1440.CheckedChanged += new System.EventHandler(this.m_CheckBox1440_CheckedChanged);
             // 
@@ -335,6 +364,7 @@ namespace Epic7Assistant
             // 
             // m_ButtonRun
             // 
+            this.m_ButtonRun.Enabled = false;
             this.m_ButtonRun.Location = new System.Drawing.Point(489, 585);
             this.m_ButtonRun.Name = "m_ButtonRun";
             this.m_ButtonRun.Size = new System.Drawing.Size(104, 30);
@@ -343,27 +373,26 @@ namespace Epic7Assistant
             this.m_ButtonRun.UseVisualStyleBackColor = true;
             this.m_ButtonRun.Click += new System.EventHandler(this.m_ButtonRun_Click);
             // 
-            // m_PictureBox
+            // m_LabelRunning
             // 
-            this.m_PictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.m_PictureBox.Image = ((System.Drawing.Image)(resources.GetObject("m_PictureBox.Image")));
-            this.m_PictureBox.Location = new System.Drawing.Point(-3, 1);
-            this.m_PictureBox.Name = "m_PictureBox";
-            this.m_PictureBox.Size = new System.Drawing.Size(102, 70);
-            this.m_PictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.m_PictureBox.TabIndex = 6;
-            this.m_PictureBox.TabStop = false;
+            this.m_LabelRunning.AutoSize = true;
+            this.m_LabelRunning.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_LabelRunning.Location = new System.Drawing.Point(542, 558);
+            this.m_LabelRunning.Name = "m_LabelRunning";
+            this.m_LabelRunning.Size = new System.Drawing.Size(133, 13);
+            this.m_LabelRunning.TabIndex = 43;
+            this.m_LabelRunning.Text = "Automation Running...";
+            this.m_LabelRunning.Visible = false;
             // 
-            // m_CheckBoxShopRefresh
+            // m_LabelStepFive
             // 
-            this.m_CheckBoxShopRefresh.AutoSize = true;
-            this.m_CheckBoxShopRefresh.Location = new System.Drawing.Point(48, 337);
-            this.m_CheckBoxShopRefresh.Name = "m_CheckBoxShopRefresh";
-            this.m_CheckBoxShopRefresh.Size = new System.Drawing.Size(91, 17);
-            this.m_CheckBoxShopRefresh.TabIndex = 42;
-            this.m_CheckBoxShopRefresh.Text = "Shop Refresh";
-            this.m_CheckBoxShopRefresh.UseVisualStyleBackColor = true;
-            this.m_CheckBoxShopRefresh.CheckedChanged += new System.EventHandler(this.m_CheckBoxShopRefresh_CheckedChanged);
+            this.m_LabelStepFive.AutoSize = true;
+            this.m_LabelStepFive.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_LabelStepFive.Location = new System.Drawing.Point(26, 367);
+            this.m_LabelStepFive.Name = "m_LabelStepFive";
+            this.m_LabelStepFive.Size = new System.Drawing.Size(822, 32);
+            this.m_LabelStepFive.TabIndex = 44;
+            this.m_LabelStepFive.Text = resources.GetString("m_LabelStepFive.Text");
             // 
             // Epic7AssistantGUI
             // 
@@ -381,12 +410,12 @@ namespace Epic7Assistant
             this.Text = "Form1";
             this.m_PanelTitleBar.ResumeLayout(false);
             this.m_PanelTitleBar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBox)).EndInit();
             this.panel1.ResumeLayout(false);
             this.m_PanelLogs.ResumeLayout(false);
             this.m_PanelLogs.PerformLayout();
             this.m_PanelAuto.ResumeLayout(false);
             this.m_PanelAuto.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -419,6 +448,8 @@ namespace Epic7Assistant
         private System.Windows.Forms.Label m_LabelStepTwo;
         private System.Windows.Forms.Label m_LabelStepOne;
         private System.Windows.Forms.CheckBox m_CheckBoxShopRefresh;
+        private System.Windows.Forms.Label m_LabelRunning;
+        private System.Windows.Forms.Label m_LabelStepFive;
     }
 }
 

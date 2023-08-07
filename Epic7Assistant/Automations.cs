@@ -19,6 +19,8 @@ namespace Epic7Assistant
 {
     class Automations
     {
+        Epic7AssistantGUI gGui;
+
         bool gHunt;
         bool gAP;
         bool gEvent;
@@ -59,10 +61,12 @@ namespace Epic7Assistant
         string gFilePathExpedVictory;
         string gFilePathExpedConfirm;
         string gFilePathExpedDamageRanking;
+        string gFilePathConnectionError;
 
 
         public Automations(Epic7AssistantGUI gui, bool hunt, bool ap, bool events, bool expeditions, bool shopRef, bool resolution1080, bool resolution1440, bool resolution4k)
         {
+            gGui = gui;
             gHunt = hunt;
             gAP = ap;
             gEvent = events;
@@ -78,8 +82,10 @@ namespace Epic7Assistant
             // Set resolutions
             if (g1080p)
             {
+                // Harcoded resolution numbers for main button area: Confirm / Try Again / Restart. 
                 gPointX = Globals.PointX1080;
                 gPointY = Globals.PointY1080;
+
                 gPointXenergy = Globals.PointX1080energy;
                 gPointYenergy = Globals.PointY1080energy;
                 gFilePathRepeat = Globals.filePathRepeat1080;
@@ -92,11 +98,14 @@ namespace Epic7Assistant
                 gFilePathExpedVictory = Globals.filePathExpedVictory1080;
                 gFilePathExpedConfirm = Globals.filePathExpedConfirm1080;
                 gFilePathExpedDamageRanking = Globals.filePathExpedDamageRanking1080;
+                gFilePathConnectionError = Globals.filePathConnectionError1080;
             }
             else if(g1440p)
             {
+                // Harcoded resolution numbers for main button area: Confirm / Try Again / Restart. 
                 gPointX = Globals.PointX1440;
                 gPointY = Globals.PointY1440;
+
                 gPointXenergy = Globals.PointX1440energy;
                 gPointYenergy = Globals.PointY1440energy;
                 gFilePathRepeat = Globals.filePathRepeat1440;
@@ -106,8 +115,10 @@ namespace Epic7Assistant
             }
             else
             {
+                // Harcoded resolution numbers for main button area: Confirm / Try Again / Restart. 
                 gPointX = Globals.PointX4k;
                 gPointY = Globals.PointY4k;
+
                 gPointXenergy = Globals.PointX4kenergy;
                 gPointYenergy = Globals.PointY4kenergy;
                 gFilePathRepeat = Globals.filePathRepeat4k;
@@ -130,7 +141,7 @@ namespace Epic7Assistant
                         break;
                     }
 
-                    Thread.Sleep(5000);
+                    Thread.Sleep(30000);
                     RunHunt();
                 }
 
@@ -148,7 +159,7 @@ namespace Epic7Assistant
                         break;
                     }
 
-                    Thread.Sleep(5000);
+                    Thread.Sleep(30000);
                     RunAP();
                 }
 
@@ -228,22 +239,34 @@ namespace Epic7Assistant
 
         private void RunHunt()
         {
-            // Looking to see if arrange is selectable or not.
+            // Init coords
+            int x;
+            int y;
 
+            // Check for any connection error off the rip.
+            ConnectionErrorCheck();
+
+            // Looking to see if "arrange" button in the top right corner after finishing a battle is selectable or not.
             if (!ImageExistsOnScreen(gFilePathRepeat))
             {
-                //Console.WriteLine("We did not find the image. Battle has not ended yet!");
+                //If it is NOT selectable, that means the current cycle of the battle is still going and we only need to check for errors.
+                ConnectionErrorCheck();
+                gGui.UpdateLogs("The hunt continues...");
             }
             else
             {
                 gCycleCounter++;
-                Console.WriteLine("Total Cycle Count: " + gCycleCounter);
+                gGui.UpdateLogs("Total Cycle Count Hunt: " + gCycleCounter);
 
                 if (ImageExistsOnScreen(gFilePathFailed))
                 {
-                    Console.WriteLine("Finished cycle on failed. Intializing failed steps.");
+                    gGui.UpdateLogs("Finished cycle on failed. Intializing failed steps.");
 
-                    Cursor.Position = new System.Drawing.Point(gPointX, gPointY);
+                    // Set coords
+                    x = gPointOfItem.X;
+                    y = gPointOfItem.Y;
+
+                    Cursor.Position = new System.Drawing.Point(x, y);
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
                     Thread.Sleep(gTimeBetweenClicks);
@@ -252,15 +275,19 @@ namespace Epic7Assistant
 
                     if (ImageExistsOnScreen(gFilePathEnergy))
                     {
-                        Console.WriteLine("We found energy button.");
-                        EnergyCheck();
+                        // Set coords
+                        x = gPointOfItem.X;
+                        y = gPointOfItem.Y;
+
+                        gGui.UpdateLogs("We found energy button.");
+                        EnergyCheck(x, y);
                     }
                     
 
                 }
                 else
                 {
-                    Console.WriteLine("We did find the image. Battle has ended normally.");
+                    gGui.UpdateLogs("Battle has ended normally. Restarting battle.");
                     Cursor.Position = new System.Drawing.Point(gPointX, gPointY);
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
@@ -273,30 +300,47 @@ namespace Epic7Assistant
 
                     if (ImageExistsOnScreen(gFilePathEnergy))
                     {
-                        Console.WriteLine("We found energy button.");
-                        EnergyCheck();
+                        // Set coords
+                        x = gPointOfItem.X;
+                        y = gPointOfItem.Y;
+
+                        gGui.UpdateLogs("We found energy button.");
+                        EnergyCheck(x, y);
                     }
-                    
                 }
             }
         }
 
         private void RunAP()
         {
-            // Looking to see if arrange is selectable or not.
+            // Init coords
+            int x;
+            int y;
 
+            // Check for any connection error off the rip.
+            ConnectionErrorCheck();
+
+            // Looking to see if arrange is selectable or not.
             if (!ImageExistsOnScreen(gFilePathRepeat))
             {
-                Console.WriteLine("We did not find the image. Battle has not ended yet.");
+                //If it is NOT selectable, that means the current cycle of the battle is still going and we only need to check for errors.
+                ConnectionErrorCheck();
+                gGui.UpdateLogs("The journey continues...");
             }
             else
             {
+                gCycleCounter++;
+                gGui.UpdateLogs("Total Cycle Count AP: " + gCycleCounter);
 
                 if (ImageExistsOnScreen(gFilePathFailed))
                 {
-                    Console.WriteLine("Finished cycle on failed. Intializing failed steps.");
+                    gGui.UpdateLogs("Finished cycle on failed. Intializing failed steps.");
 
-                    Cursor.Position = new System.Drawing.Point(gPointX, gPointY);
+                    // Set coords
+                    x = gPointOfItem.X;
+                    y = gPointOfItem.Y;
+
+                    Cursor.Position = new System.Drawing.Point(x, y);
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
                     Thread.Sleep(gTimeBetweenClicks);
@@ -307,13 +351,18 @@ namespace Epic7Assistant
 
                     if (ImageExistsOnScreen(gFilePathEnergy))
                     {
-                        EnergyCheck();
+                        // Set coords
+                        x = gPointOfItem.X;
+                        y = gPointOfItem.Y;
+
+                        gGui.UpdateLogs("We found energy button.");
+                        EnergyCheck(x, y);
                     }
 
                 }
                 else
                 {
-                    Console.WriteLine("We did find the image. Battle has ended normally.");
+                    gGui.UpdateLogs("Battle has ended normally. Restarting battle.");
                     Cursor.Position = new System.Drawing.Point(gPointX, gPointY);
                     Thread.Sleep(gTimeBetweenClicks);
                     VirtualMouse.LeftClick();
@@ -327,7 +376,12 @@ namespace Epic7Assistant
 
                     if (ImageExistsOnScreen(gFilePathEnergy))
                     {
-                        EnergyCheck();
+                        // Set coords
+                        x = gPointOfItem.X;
+                        y = gPointOfItem.Y;
+
+                        gGui.UpdateLogs("We found energy button.");
+                        EnergyCheck(x, y);
                     }
                 }
             }
@@ -335,7 +389,7 @@ namespace Epic7Assistant
 
         private void RunEvent()
         {
-
+            // TODO - Not yet supported.
         }
 
         private void RunShopRefresh()
@@ -879,12 +933,16 @@ namespace Epic7Assistant
             return false;
         }
 
-        private void EnergyCheck()
+        private void EnergyCheck(int xCoordBuyEnergy, int yCoordBuyEnergy)
         {
-            Console.WriteLine("Purchasing Energy");
-            Cursor.Position = new System.Drawing.Point(gPointXenergy, gPointYenergy);
+            // Move cursor to location to purchase energy.
+            gGui.UpdateLogs("Purchasing Energy");
+            Cursor.Position = new System.Drawing.Point(xCoordBuyEnergy, yCoordBuyEnergy);
             Thread.Sleep(gTimeBetweenClicks);
             VirtualMouse.LeftClick();
+            gGui.UpdateLogs("Energy Purchased");
+
+            // Reposition mouse back to main button area on bottom right.
             Cursor.Position = new System.Drawing.Point(gPointX, gPointY);
             Thread.Sleep(gTimeBetweenClicks);
             VirtualMouse.LeftClick();
@@ -895,13 +953,34 @@ namespace Epic7Assistant
         {
             if(ImageExistsOnScreen(gFilePathInventoryFull))
             {
-                Console.WriteLine("Inventory Full. Job Complete");
+                gGui.UpdateLogs("Inventory Full. Job Complete");
                 gStatus = true;
             }
             else
             {
-                //Console.WriteLine("Inventory not Full. Moving on.");
+                //Inventory not Full. Moving on.
                 gStatus = false;
+            }
+        }
+
+        private void ConnectionErrorCheck()
+        {
+            if (ImageExistsOnScreen(gFilePathConnectionError))
+            {
+                gGui.UpdateLogs("Found connection error message on screen. Removing message and attempting to move on.");
+
+                int x = gPointOfItem.X;
+                int y = gPointOfItem.Y;
+
+                // Move to error message
+                Cursor.Position = new System.Drawing.Point(x, y);
+                Thread.Sleep(gTimeBetweenClicks);
+                VirtualMouse.LeftClick();
+                Thread.Sleep(gTimeBetweenClicks);
+
+                // Move back to main button area.
+                Cursor.Position = new System.Drawing.Point(gPointX, gPointY);
+
             }
         }
 

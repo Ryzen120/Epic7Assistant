@@ -406,6 +406,14 @@
         HHOEhPb+fz27fLG7DAMMMMAwwwwDDDDAMMMMAwwwwDDDDAMMMMB//9k=
 </value>
   </data>
+  <data name="m_LabelStepFive.Text" xml:space="preserve">
+    <value>5. Feel free to open logs tab to track progress. Please refrain from using your mouse, as the automation will be using it.
+    Moving your mouse while the automation runs could cause the automation to fail.</value>
+  </data>
+  <data name="m_LabelStepOne.Text" xml:space="preserve">
+    <value>1. If you only have one monitor, go straight to step 3. Otherwise please ensure step 1 and 2 are complete.
+    Go to Windows settings -&gt; Display -&gt; Set monitor where BlueStacks will run to main display. </value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAIBkAAAEAIAAMDQAAFgAAACgAAAAgAAAAMgAAAAEAIAAAAAAAgAwAAAAAAAAAAAAAAAAAAAAA

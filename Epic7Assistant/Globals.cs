@@ -31,6 +31,7 @@ namespace Epic7Assistant
         public static string filePathShopMystics1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\mysticsSmaller1080.png";
         public static string filePathShopBuy1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\shopBuy1080.png";
         public static string filePathShopCancel1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\shopCancel1080.png";
+        public static string filePathConnectionError1080 = "C:\\GIT Repo\\Epic7Assistant\\Epic7Assistant\\Resources\\connectionError1080.png";
 
         //1440
         public static int PointX1440 = 1710;

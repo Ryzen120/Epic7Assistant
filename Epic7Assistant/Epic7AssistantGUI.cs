@@ -35,12 +35,33 @@ namespace Epic7Assistant
         bool gExped;
         bool gShopRef;
 
+        private FormWindowState previousWindowState;
+
         public Epic7AssistantGUI()
         {
             InitializeComponent();
+            previousWindowState = this.WindowState;
+            this.Resize += MainForm_Resize;
 
             gStartPoint = new int[2];
             gLogFile = Environment.GetEnvironmentVariable("USERPROFILE") + "\\Epic7AssistantLogs_Logs.txt";
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState != previousWindowState)
+            {
+                if (this.WindowState == FormWindowState.Maximized)
+                {
+                    this.BeginInvoke(new Action(() => {
+                        this.WindowState = previousWindowState;
+                    }));
+                }
+                else
+                {
+                    previousWindowState = this.WindowState;
+                }
+            }
         }
 
         private void m_CheckBox1080_CheckedChanged(object sender, EventArgs e)
@@ -50,6 +71,7 @@ namespace Epic7Assistant
             g4k = false;
             m_CheckBox1440.Checked = false;
             m_CheckBox4k.Checked = false;
+            CheckIfReady();
         }
 
         private void m_CheckBox1440_CheckedChanged(object sender, EventArgs e)
@@ -59,6 +81,7 @@ namespace Epic7Assistant
             g4k = false;
             m_CheckBox1080.Checked = false;
             m_CheckBox4k.Checked = false;
+            CheckIfReady();
         }
 
         private void m_CheckBox4k_CheckedChanged(object sender, EventArgs e)
@@ -68,6 +91,7 @@ namespace Epic7Assistant
             g4k = true;
             m_CheckBox1080.Checked = false;
             m_CheckBox1440.Checked = false;
+            CheckIfReady();
         }
 
         private void m_ButtonCloseApp_Click(object sender, EventArgs e)
@@ -101,6 +125,18 @@ namespace Epic7Assistant
                 File.AppendAllText(gLogFile, DateTime.Now + ": " + message + Environment.NewLine);
 
                 m_RichTextBoxLoggingOutput.Text += DateTime.Now + ":" + message + Environment.NewLine;
+            }
+        }
+
+        public void CheckIfReady()
+        {
+            if((m_CheckBox1080.Checked == true || m_CheckBox1440.Checked == true || m_CheckBox4k.Checked == true) && (m_CheckBoxHunt.Checked == true || m_CheckBoxAP.Checked == true || m_CheckBoxEvent.Checked == true || m_CheckBoxShopRefresh.Checked == true || m_CheckBoxExped.Checked == true))
+            {
+                m_ButtonRun.Enabled = true;
+            }
+            else
+            {
+                m_ButtonRun.Enabled = false;
             }
         }
 
@@ -153,8 +189,17 @@ namespace Epic7Assistant
         async private void m_ButtonRun_Click(object sender, EventArgs e)
         {
             Globals.Cancelled = false;
+            m_ButtonRun.Enabled = false;
+            m_LabelRunning.Visible = true;
+            m_ButtonCancel.Enabled = true;
 
             Task task1 = Task.Factory.StartNew(() => new Automations(this, gHunt, gAP, gEvent, gExped, gShopRef, g1080p, g1440p, g4k));
+
+            await task1;
+            m_ButtonRun.Enabled = true;
+            m_LabelRunning.Visible = false;
+            m_ButtonCancel.Enabled = false;
+            m_LabelRunning.Text = "Automation Running...";
 
         }
 
@@ -164,9 +209,12 @@ namespace Epic7Assistant
             gAP = false;
             gEvent = false;
             gExped = false;
+            gShopRef = false;
             m_CheckBoxAP.Checked = false;
             m_CheckBoxEvent.Checked = false;
             m_CheckBoxExped.Checked = false;
+            m_CheckBoxShopRefresh.Checked = false;
+            CheckIfReady();
         }
 
         private void m_CheckBoxAP_CheckedChanged(object sender, EventArgs e)
@@ -175,9 +223,12 @@ namespace Epic7Assistant
             gAP = true;
             gEvent = false;
             gExped = false;
+            gShopRef = false;
             m_CheckBoxHunt.Checked = false;
             m_CheckBoxEvent.Checked = false;
             m_CheckBoxExped.Checked = false;
+            m_CheckBoxShopRefresh.Checked = false;
+            CheckIfReady();
         }
 
         private void m_CheckBoxEvent_CheckedChanged(object sender, EventArgs e)
@@ -186,9 +237,12 @@ namespace Epic7Assistant
             gAP = false;
             gEvent = true;
             gExped = false;
+            gShopRef = false;
             m_CheckBoxHunt.Checked = false;
             m_CheckBoxAP.Checked = false;
             m_CheckBoxExped.Checked = false;
+            m_CheckBoxShopRefresh.Checked = false;
+            CheckIfReady();
         }
 
         private void m_CheckBoxExped_CheckedChanged(object sender, EventArgs e)
@@ -197,14 +251,32 @@ namespace Epic7Assistant
             gAP = false;
             gEvent = false;
             gExped = true;
+            gShopRef = false;
             m_CheckBoxHunt.Checked = false;
             m_CheckBoxAP.Checked = false;
             m_CheckBoxEvent.Checked = false;
+            m_CheckBoxShopRefresh.Checked = false;
+            CheckIfReady();
+        }
+
+        private void m_CheckBoxShopRefresh_CheckedChanged(object sender, EventArgs e)
+        {
+            gHunt = false;
+            gAP = false;
+            gEvent = false;
+            gExped = false;
+            gShopRef = true;
+            m_CheckBoxHunt.Checked = false;
+            m_CheckBoxAP.Checked = false;
+            m_CheckBoxExped.Checked = false;
+            m_CheckBoxEvent.Checked = false;
+            CheckIfReady();
         }
 
         private void m_ButtonCancel_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Cancelling...");
+            UpdateLogs("Cancelling Automation...");
+            m_LabelRunning.Text = "Cancelling Automation...";
             Globals.Cancelled = true;
         }
 
@@ -216,11 +288,6 @@ namespace Epic7Assistant
         private void m_ButtonAuto_Click(object sender, EventArgs e)
         {
             m_PanelAuto.BringToFront();
-        }
-
-        private void m_CheckBoxShopRefresh_CheckedChanged(object sender, EventArgs e)
-        {
-            gShopRef = true;
         }
     }
 }
